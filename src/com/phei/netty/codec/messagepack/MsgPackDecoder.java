@@ -3,7 +3,6 @@ package com.phei.netty.codec.messagepack;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageDecoder;
 import org.msgpack.MessagePack;
 
 import java.util.List;

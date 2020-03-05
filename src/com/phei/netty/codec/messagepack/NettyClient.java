@@ -27,8 +27,7 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(
-                                new LengthFieldBasedFrameDecoder(65535,0,2,0,2));
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535,0,2,0,2));
                             ch.pipeline().addLast(new MsgPackDecoder());
                             ch.pipeline().addLast(new LengthFieldPrepender(2));
                             ch.pipeline().addLast(new MsgPackEncoder());
