@@ -1,0 +1,9 @@
+syntax="proto3";
+option java_package="com.phei.netty.codec.protobuf";
+option java_outer_classname="HelloWorldProto";
+
+message Request{
+    int64 id=1;
+    string name=2;
+    string age=3;
+}
