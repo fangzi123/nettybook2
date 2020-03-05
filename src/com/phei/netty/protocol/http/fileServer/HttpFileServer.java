@@ -36,7 +36,7 @@ public class HttpFileServer {
 
     private static final String DEFAULT_URL = "/src/com/phei/netty/";
 
-    public void run(final int port, final String url) throws Exception {
+    public void run(final String host,final int port, final String url) throws Exception {
 	EventLoopGroup bossGroup = new NioEventLoopGroup();
 	EventLoopGroup workerGroup = new NioEventLoopGroup();
 	try {
@@ -47,20 +47,15 @@ public class HttpFileServer {
 			@Override
 			protected void initChannel(SocketChannel ch)
 				throws Exception {
-			    ch.pipeline().addLast("http-decoder",
-				    new HttpRequestDecoder()); // 请求消息解码器
-			    ch.pipeline().addLast("http-aggregator",
-				    new HttpObjectAggregator(65536));// 目的是将多个消息转换为单一的request或者response对象
-			    ch.pipeline().addLast("http-encoder",
-				    new HttpResponseEncoder());//响应解码器
-			    ch.pipeline().addLast("http-chunked",
-				    new ChunkedWriteHandler());//目的是支持异步大文件传输（）
-			    ch.pipeline().addLast("fileServerHandler",
-				    new HttpFileServerHandler(url));// 业务逻辑
+			    ch.pipeline().addLast("http-decoder", new HttpRequestDecoder()); // 请求消息解码器
+			    ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(65536));// 目的是将多个消息转换为单一的request或者response对象
+			    ch.pipeline().addLast("http-encoder", new HttpResponseEncoder());//响应解码器
+			    ch.pipeline().addLast("http-chunked", new ChunkedWriteHandler());//目的是支持异步大文件传输（）
+			    ch.pipeline().addLast("fileServerHandler",new HttpFileServerHandler(url));// 业务逻辑
 			}
 		    });
-	    ChannelFuture future = b.bind("192.168.1.102", port).sync();
-	    System.out.println("HTTP文件目录服务器启动，网址是 : " + "http://192.168.1.102:"
+	    ChannelFuture future = b.bind(host, port).sync();
+	    System.out.println("HTTP文件目录服务器启动，网址是 : " + "http://127.0.0.1:"
 		    + port + url);
 	    future.channel().closeFuture().sync();
 	} finally {
@@ -81,6 +76,6 @@ public class HttpFileServer {
 	String url = DEFAULT_URL;
 	if (args.length > 1)
 	    url = args[1];
-	new HttpFileServer().run(port, url);
+	new HttpFileServer().run("127.0.0.1",port, url);
     }
 }
